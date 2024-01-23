@@ -3,13 +3,33 @@ import close from '../../assets/images/close-icon.svg';
 import { Order } from '../../types/Order';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { calculateOrderTotal } from '../../utils/calculateOrderTotal';
+import { useEffect } from 'react';
 
 interface OrderModalProps {
   visible: boolean
   order: Order | null
+  onCloseModal(): void
 }
 
-export function OrderModal({ visible, order }: OrderModalProps) {
+export function OrderModal({ visible, order, onCloseModal }: OrderModalProps) {
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        onCloseModal();
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onCloseModal]);
+
+
+
+
   if (!visible || !order) {
     return null;
   }
@@ -19,12 +39,12 @@ export function OrderModal({ visible, order }: OrderModalProps) {
       <ModalBody>
         <header>
           <strong>Mesa {order.table}</strong>
-          <button type="button">
+          <button type="button" onClick={onCloseModal}>
             <img src={close} alt="close" />
           </button>
         </header>
 
-        <div className="status-container">
+        <div className='status-container'>
           <small>Status do Pedido</small>
           <div>
             <span>
@@ -45,7 +65,7 @@ export function OrderModal({ visible, order }: OrderModalProps) {
           <strong>Itens</strong>
 
           <OrderItems>
-            {order.products.map(({_id, product, quantity}) =>(
+            {order.products.map(({ _id, product, quantity }) => (
               <div className="item" key={_id}>
                 <img
                   src={`http://localhost:3001/uploads/${product.imagePath}`}
@@ -73,7 +93,13 @@ export function OrderModal({ visible, order }: OrderModalProps) {
         </OrderDetails>
 
         <Actions>
-          <button></button>
+          <button type='button' className='primary'>
+            <span>👨‍🍳</span>
+            <strong>Iniciar Produção</strong>
+          </button>
+          <button type='button' className='secondary'>
+            <strong>Cancelar Pedido</strong>
+          </button>
         </Actions>
       </ModalBody>
     </Overlay>
