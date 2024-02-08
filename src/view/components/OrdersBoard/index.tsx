@@ -1,23 +1,28 @@
 import { OrderModal } from '../OrderModal';
 import { Board, OrdersContainer } from './styles';
 import { Order } from '../../../app/types/Order';
-import { useOrdersBoardModalController } from './useOrdersBoardModalController';
+import { useOrdersBoardController } from './useOrdersBoardController';
 
 interface OrdersBoardProps {
   icon: string;
   title: string;
-  orders: Order[]
+  orders: Order[];
+  onCancelOrder(orderId: string): void;
+  onOrderStatusChange({ orderId, status }: { orderId: string, status: Order['status'] }): void
 }
 
 
-export function OrdersBoard({ icon, title, orders }: OrdersBoardProps) {
+export function OrdersBoard({ icon, title, orders, onCancelOrder, onOrderStatusChange }: OrdersBoardProps) {
 
   const {
     isModalVisible,
     selectedOrder,
+    isLoading,
     handleOpenModal,
-    handleCloseModal
-  } = useOrdersBoardModalController();
+    handleCloseModal,
+    handleCancelOrder,
+    handleChangeOrderStatus
+  } = useOrdersBoardController({ onCancelOrder, onOrderStatusChange });
 
   return (
     <Board>
@@ -25,7 +30,10 @@ export function OrdersBoard({ icon, title, orders }: OrdersBoardProps) {
       <OrderModal
         visible={isModalVisible}
         order={selectedOrder}
+        isLoading={isLoading}
         onCloseModal={handleCloseModal}
+        onCancelOrder={handleCancelOrder}
+        onChangeOrderStatus={handleChangeOrderStatus}
       />
 
       <header>

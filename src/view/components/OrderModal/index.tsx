@@ -10,10 +10,13 @@ import { useOrderModalController } from './useOrderModalController';
 interface OrderModalProps {
   visible: boolean
   order: Order | null
-  onCloseModal(): void
+  isLoading: boolean;
+  onCloseModal(): void;
+  onCancelOrder(): void;
+  onChangeOrderStatus(): void;
 }
 
-export function OrderModal({ visible, order, onCloseModal }: OrderModalProps) {
+export function OrderModal({ visible, order, isLoading, onCloseModal, onCancelOrder, onChangeOrderStatus }: OrderModalProps) {
 
   useOrderModalController({ onCloseModal });
 
@@ -80,11 +83,32 @@ export function OrderModal({ visible, order, onCloseModal }: OrderModalProps) {
         </OrderDetails>
 
         <Actions>
-          <button type='button' className='primary'>
-            <span>👨‍🍳</span>
-            <strong>Iniciar Produção</strong>
-          </button>
-          <button type='button' className='secondary'>
+          {order.status !== 'DONE' && (
+            <button
+              type='button'
+              className='primary'
+              disabled={isLoading}
+              onClick={onChangeOrderStatus}
+            >
+              <span>
+                {order.status === 'WAITING' && '👨‍🍳'}
+                {order.status === 'IN_PRODUCTION' && '✔'}
+              </span>
+              <strong>
+                {order.status === 'WAITING' && 'Iniciar Produção'}
+                {order.status === 'IN_PRODUCTION' && 'Concluir Pedido'}
+              </strong>
+
+            </button>
+          )
+          }
+
+          <button
+            type='button'
+            className='secondary'
+            onClick={onCancelOrder}
+            disabled={isLoading}
+          >
             <strong>Cancelar Pedido</strong>
           </button>
         </Actions>
