@@ -1,6 +1,7 @@
-import { Header } from './components/Header';
-import { Orders } from './components/Orders';
-import { GlobalStyles } from './styles/GlobalStyles';
+import { Header } from './view/components/Header';
+import { Orders } from './view/components/Orders';
+import { GlobalStyles } from './view/styles/GlobalStyles';
+
 
 export function App() {
   return (<>

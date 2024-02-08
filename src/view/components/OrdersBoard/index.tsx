@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react';
-import { Order } from '../../types/Order';
 import { OrderModal } from '../OrderModal';
 import { Board, OrdersContainer } from './styles';
+import { Order } from '../../../app/types/Order';
+import { useOrdersBoardModalController } from './useOrdersBoardModalController';
 
 interface OrdersBoardProps {
   icon: string;
@@ -11,18 +11,13 @@ interface OrdersBoardProps {
 
 
 export function OrdersBoard({ icon, title, orders }: OrdersBoardProps) {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<null | Order>(null);
 
-  function handleOpenModal(order: Order) {
-    setSelectedOrder(order);
-    setIsModalVisible(true);
-  }
-
-  const handleCloseModal = useCallback(() => {
-    setSelectedOrder(null);
-    setIsModalVisible(false);
-  }, []);
+  const {
+    isModalVisible,
+    selectedOrder,
+    handleOpenModal,
+    handleCloseModal
+  } = useOrdersBoardModalController();
 
   return (
     <Board>

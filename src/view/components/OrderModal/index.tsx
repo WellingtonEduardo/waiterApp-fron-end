@@ -1,9 +1,11 @@
 import { Overlay, ModalBody, OrderDetails, OrderItems, Actions } from './styles';
-import close from '../../assets/images/close-icon.svg';
-import { Order } from '../../types/Order';
-import { formatCurrency } from '../../utils/formatCurrency';
-import { calculateOrderTotal } from '../../utils/calculateOrderTotal';
-import { useEffect } from 'react';
+import close from '../../../assets/images/close-icon.svg';
+
+
+import { Order } from '../../../app/types/Order';
+import { formatCurrency } from '../../../app/utils/formatCurrency';
+import { calculateOrderTotal } from '../../../app/utils/calculateOrderTotal';
+import { useOrderModalController } from './useOrderModalController';
 
 interface OrderModalProps {
   visible: boolean
@@ -13,22 +15,7 @@ interface OrderModalProps {
 
 export function OrderModal({ visible, order, onCloseModal }: OrderModalProps) {
 
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        onCloseModal();
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [onCloseModal]);
-
-
-
+  useOrderModalController({ onCloseModal });
 
   if (!visible || !order) {
     return null;
