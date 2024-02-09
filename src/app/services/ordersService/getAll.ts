@@ -1,6 +1,8 @@
+import { httpClient } from '../httpClient';
 
 
 
-export function getAll() {
-
+export async function getAll() {
+  const { data } = await httpClient.get('/orders');
+  return data;
 }
